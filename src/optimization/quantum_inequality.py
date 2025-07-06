@@ -245,13 +245,18 @@ class NegativeEnergyGenerator:
         enhanced_bound = self.qi_bounds.enhanced_ford_roman_bound()
         classical_bound = self.qi_bounds.classical_ford_roman_bound()
         
-        # Check violation strength
+        # Check violation strength - protect against division by zero
         violation_strength = self.qi_bounds.negative_energy_violation_strength()
         
         # Validation status - allow small violations for demonstration
         tolerance = 1.1  # Allow 10% violation for demonstration purposes
         is_valid = integral_value >= enhanced_bound * tolerance
-        violation_magnitude = abs(integral_value) / abs(enhanced_bound) if enhanced_bound != 0 else np.inf
+        
+        # Safe calculation of violation magnitude
+        if abs(enhanced_bound) > 1e-15:  # Avoid division by very small numbers
+            violation_magnitude = abs(integral_value) / abs(enhanced_bound)
+        else:
+            violation_magnitude = np.inf if abs(integral_value) > 1e-15 else 1.0
         
         return {
             'integral_value': integral_value,

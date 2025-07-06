@@ -40,11 +40,21 @@ class PolymerQuantization:
         self.validate_parameters()
         
     def validate_parameters(self):
-        """Validate polymer quantization parameters."""
+        """Validate polymer quantization parameters with robust bounds checking."""
+        # Safe operating ranges based on UQ analysis
+        mu_min, mu_max = 1e-6, 2.0
+        
+        if not np.isfinite(self.mu):
+            raise ValueError(f"Polymer parameter μ must be finite, got μ={self.mu}")
+        
         if self.mu <= 0:
             raise ValueError("Polymer parameter μ must be positive")
-        if self.mu > 1.0:
-            warnings.warn("μ > 1.0 may lead to quantum geometric instabilities")
+        
+        if self.mu < mu_min:
+            warnings.warn(f"μ={self.mu} below recommended minimum {mu_min}, numerical instability possible")
+        
+        if self.mu > mu_max:
+            warnings.warn(f"μ={self.mu} above recommended maximum {mu_max}, may lead to quantum geometric instabilities")
             
     def polymer_momentum_substitution(self, classical_momentum: float) -> float:
         """
@@ -83,10 +93,24 @@ class PolymerQuantization:
         if mu is None:
             mu = self.mu
             
-        if mu == 0:
-            return 1.0  # lim_{μ→0} sinc(πμ) = 1
+        # Robust sinc calculation with Taylor expansion for small values
+        pi_mu = np.pi * mu
+        taylor_threshold = 1e-6
+        
+        if abs(pi_mu) < taylor_threshold:
+            # Taylor expansion: sinc(x) = 1 - x²/6 + x⁴/120 - x⁶/5040 + ...
+            x_squared = pi_mu * pi_mu
+            sinc_value = 1.0 - x_squared/6.0 + x_squared*x_squared/120.0
             
-        return np.sin(np.pi * mu) / (np.pi * mu)
+            # Higher order term for better precision
+            if abs(pi_mu) > taylor_threshold / 10:
+                x_sixth = x_squared * x_squared * x_squared
+                sinc_value -= x_sixth / 5040.0
+            
+            return sinc_value
+        else:
+            # Standard calculation for larger values
+            return np.sin(pi_mu) / pi_mu if pi_mu != 0 else 1.0
     
     def polymer_commutator_coefficient(self) -> complex:
         """
