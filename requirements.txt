@@ -4,3 +4,27 @@ sympy>=1.8
 matplotlib>=3.5.0
 pytest>=6.0.0
 pytest-cov>=2.12.0
+
+# UQ Analysis Framework Dependencies
+scikit-learn>=1.0.0
+pandas>=1.3.0
+seaborn>=0.11.0
+
+# Optimization and Numerical Stability
+scipy>=1.7.0
+numba>=0.56.0
+
+# Documentation and Validation
+jupyter>=1.0.0
+notebook>=6.4.0
+ipywidgets>=7.6.0
+
+# Cross-Repository Integration
+pyyaml>=5.4.0
+jsonschema>=3.2.0
+
+# Development and Testing
+black>=21.0.0
+flake8>=3.9.0
+mypy>=0.910
+pre-commit>=2.15.0
