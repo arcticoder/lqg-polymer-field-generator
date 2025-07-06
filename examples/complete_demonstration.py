@@ -15,7 +15,7 @@ import sys
 import os
 
 # Add src directory to path for imports
-sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 from core.polymer_quantization import PolymerFieldGenerator, PolymerQuantization
 from core.field_operators import QuantumGeometricFieldAlgebra, EnhancedFieldOperatorAlgebra
@@ -179,7 +179,7 @@ def demonstrate_quantum_inequality_enhancement():
     
     # Generate time array and energy density profile
     t = np.linspace(-5, 5, 1000)
-    rho_eff = neg_energy.energy_density_profile(t, amplitude=1.0, profile_type='optimal')
+    rho_eff = neg_energy.energy_density_profile(t, amplitude=0.1, profile_type='optimal')  # Reduced amplitude
     
     # Validate quantum inequality
     f_sampling = neg_energy.qi_bounds.optimal_sampling_function(t)

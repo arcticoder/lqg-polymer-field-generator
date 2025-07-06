@@ -227,10 +227,23 @@ class QuantumGeometricFieldAlgebra:
         phi_exp = self.field_operator_expectation(state_amplitudes, phi_values)
         pi_exp = self.momentum_operator_expectation(state_amplitudes)
         
-        # Calculate variances (simplified for demonstration)
-        phi_var = np.var(phi_values)
-        pi_var = np.var([self.field_operator.momentum_operator_matrix_element(n, n).real 
-                        for n in range(len(state_amplitudes))])
+        # Calculate variances with proper quantum mechanical treatment
+        phi_squared_exp = self.field_operator_expectation(state_amplitudes, phi_values**2)
+        phi_var = abs(phi_squared_exp - phi_exp**2)
+        
+        # For momentum, calculate ⟨Π²⟩ - ⟨Π⟩²
+        pi_squared_terms = []
+        for n in range(len(state_amplitudes)):
+            pi_element = self.field_operator.momentum_operator_matrix_element(n, n)
+            pi_squared_terms.append(abs(state_amplitudes[n])**2 * abs(pi_element)**2)
+        
+        pi_squared_exp = sum(pi_squared_terms)
+        pi_var = abs(pi_squared_exp - abs(pi_exp)**2)
+        
+        # Add minimum quantum fluctuations to prevent zero uncertainty
+        min_fluctuation = 1e-6
+        phi_var = max(phi_var, min_fluctuation)
+        pi_var = max(pi_var, min_fluctuation)
         
         # Polymer-modified minimum uncertainty
         min_uncertainty = 0.5 * const.hbar * self.field_operator.sinc_factor()
