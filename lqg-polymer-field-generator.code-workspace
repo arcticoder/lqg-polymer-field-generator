@@ -9,6 +9,10 @@
 			"path": "../artificial-gravity-field-generator"
 		},
 		{
+			"name": "energy",
+			"path": "../energy"
+		},
+		{
 			"name": "negative-energy-generator",
 			"path": "../negative-energy-generator"
 		},
