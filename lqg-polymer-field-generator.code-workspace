@@ -13,6 +13,10 @@
 			"path": "../energy"
 		},
 		{
+			"name": "enhanced-simulation-hardware-abstraction-framework",
+			"path": "../enhanced-simulation-hardware-abstraction-framework"
+		},
+		{
 			"name": "negative-energy-generator",
 			"path": "../negative-energy-generator"
 		},
