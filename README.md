@@ -157,12 +157,22 @@ lqg-polymer-field-generator/
 ```bash
 pip install -r requirements.txt
 ```
-
-## Usage
-
-```python
-from src.core.polymer_quantization import PolymerFieldGenerator
 from src.optimization.parameter_selection import OptimalParameters
+### LQG Drive Integration and Navigation
+
+#### Cross-System Integration Development
+**Current State**: Components integrated with simulation framework but not with each other
+**Target**: Unified LQG Drive system integration
+
+**Required Integrations**:
+
+**Polymer Field Generator ↔ Volume Quantization Controller**
+   - Repository: `lqg-polymer-field-generator` ↔ `lqg-volume-quantization-controller` 
+   - Function: Coordinated spacetime discretization control
+   - Technology: SU(2) representation synchronization
+   - Challenge: SU(2) representation synchronization
+   - Implementation: Shared state vector management
+   - Status: ⚠️ **INTEGRATION PENDING** - Both components production ready, integration required
 from src.optimization.robust_optimizer import RobustParameterValidator
 
 # Initialize the generator with robust validation
